@@ -1,0 +1,41 @@
+.page-footer {
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    background-color: transparent; 
+    padding: 20px 0; 
+    text-align: center;
+    font-size: 14px;
+    color: #999999; 
+    z-index: 10; 
+}
+
+.footer-content-wrapper {
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 0 20px; 
+}
+
+.separator {
+    margin: 0 8px;
+    color: #cccccc;
+}
+
+.footer-link {
+    color: #999999;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: #555555; 
+    text-decoration: underline;
+}
+
+.copyright-text {
+    margin-bottom: 5px;
+}
+
+.legal-links {
+    display: inline-block;
+}
