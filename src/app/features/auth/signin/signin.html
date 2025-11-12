@@ -59,11 +59,12 @@
           >
             Password is required.
           </div>
-
-          <div *ngIf="errorMessage" class="error-message">
-            {{ errorMessage }}
-          </div>
         </div>
+      </div>
+
+      <!-- Global Error Message -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
       </div>
 
       <div class="login-actions">
@@ -72,7 +73,7 @@
         </button>
         <p class="signup-link">
           Don't have an account?
-          <a routerLink="/signup">Sign up</a>
+          <a routerLink="/auth/signup">Sign up</a>
         </p>
       </div>
     </form>

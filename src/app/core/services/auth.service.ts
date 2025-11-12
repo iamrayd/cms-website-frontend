@@ -15,7 +15,6 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private router: Router) {
-    // Load user from localStorage on init
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       this.currentUserSubject.next(JSON.parse(storedUser));
@@ -29,7 +28,7 @@ export class AuthService {
       const user: User = {
         name: 'Galvez James',
         email: 'Galvez@gmail.com',
-        avatar: 'https://i.pravatar.cc/150?img=12'
+        avatar: 'https://scontent-mnl1-1.xx.fbcdn.net/v/t39.30808-1/224570019_4882169058494561_8380156668375777092_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=110&ccb=1-7&_nc_sid=1d2534&_nc_eui2=AeGig9udzX9Q7bCmIoKqkmzskld63bbbx1KSV3rdttvHUkDMPUxUecj_10BQkNPthUW_vrBVzge2eyP8D3QG6sRm&_nc_ohc=vysagaBbQLYQ7kNvwF5UO9S&_nc_oc=AdkXo6B0Sal7CXdExYYpYgfB6_ca_YfpCHMYPDQVo519LBzEKlzduvvm_5b9W9x4b0c&_nc_zt=24&_nc_ht=scontent-mnl1-1.xx&_nc_gid=Y7BgoqIvH2HiQ3N_601upg&oh=00_AfgfN-ZKs_EHhSK4zv_RB3rD-pBd5HcfxIhIO38ZXcoZLg&oe=691A01C5'
       };
       
       return of({ token: 'mock-token', user }).pipe(
@@ -49,7 +48,7 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.currentUserSubject.next(null);
-    this.router.navigate(['/signin']);
+    this.router.navigate(['/auth/signin']); 
   }
 
   isLoggedIn(): boolean {

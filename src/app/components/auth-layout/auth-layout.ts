@@ -1,21 +1,21 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from '../header/header';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-auth-layout',
   standalone: true,
-  imports: [RouterOutlet, Header],
+  imports: [RouterOutlet, Header, Footer],
   template: `
-    <app-header />
-    <main class="auth-main">
-      <router-outlet />
-    </main>
+    <div class="auth-layout">
+      <app-header [showProfile]="false" />
+      <main class="auth-main">
+        <router-outlet />
+      </main>
+      <app-footer />
+    </div>
   `,
-  styles: [`
-    .auth-main {
-      min-height: calc(100vh - 90px); 
-    }
-  `]
+  styles: []
 })
 export class AuthLayoutComponent {}
