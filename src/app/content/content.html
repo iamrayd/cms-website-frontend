@@ -1,1 +1,60 @@
-<p>content works!</p>
+<main class="content">
+  <!-- Top Header: Tabs + Search + User -->
+  <header class="topbar">
+    <div class="tabs">
+      <a [class.active]="activeTab==='pages'" (click)="setTab('pages')">Pages</a> |
+      <a [class.active]="activeTab==='posts'" (click)="setTab('posts')">Posts</a> |
+      <a [class.active]="activeTab==='banners'" (click)="setTab('banners')">Banners</a>
+    </div>
+
+    <div class="search">
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Search" [(ngModel)]="searchTerm" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <button class="new-btn" (click)="goToForm()">+ New {{ activeTab | titlecase }}</button>
+    </div>
+
+    <div class="user">
+      <img src="https://via.placeholder.com/40" alt="User" />
+      <div>
+        <strong>Galvez James</strong><br>
+        <small>galvez@gmail.com</small>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content Cards -->
+  <section class="cards">
+    <mat-card *ngFor="let item of displayedContents" class="content-card">
+      <div class="card-top">
+        <img mat-card-image src="https://via.placeholder.com/100x100" alt="Image" />
+        <div class="card-info">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+          <div class="tags">
+            <span *ngFor="let tag of item.tags" class="tag"
+              [ngClass]="{'blue': tag==='&lt;h1&gt;', 'green': tag==='&lt;p&gt;', 'red': tag==='&lt;a&gt;'}">
+              {{ tag }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-bottom">
+        <span class="status"
+          [ngClass]="{
+            'published': item.status==='Published',
+            'draft': item.status==='Draft',
+            'archived': item.status==='Archived'
+          }">
+          ● {{ item.status }}
+        </span>
+        <div class="actions">
+          <button mat-flat-button color="accent" (click)="editItem(item)">Edit</button>
+          <button mat-flat-button color="primary">Preview</button>
+        </div>
+      </div>
+    </mat-card>
+  </section>
+</main>
