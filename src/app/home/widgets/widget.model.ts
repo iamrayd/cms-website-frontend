@@ -3,4 +3,4 @@ export interface Widget {
   title: string;
   number: number;
   icon: string;
-}
+};
