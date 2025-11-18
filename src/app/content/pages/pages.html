@@ -1,29 +1,32 @@
 <div *ngIf="isLoading">Loading pages...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
 
-<div *ngIf="!isLoading">
-  <div class="pages-grid">
-    <div class="page-card" *ngFor="let page of pages">
-      <div class="thumbnail"></div>
+<div *ngIf="!isLoading && !error && pages.length === 0">
+  No pages yet. Try adding one in Swagger (POST /api/Pages).
+</div>
 
-      <h3>{{ page.title }}</h3>
-      <p class="slug">/{{ page.slug }}</p>
-      <p class="description">{{ page.description }}</p>
+<div class="pages-grid" *ngIf="!isLoading && !error && pages.length > 0">
+  <div class="page-card" *ngFor="let page of pages">
+    <div class="thumbnail"></div>
 
-      <div class="tags">
-        <span class="tag">h1</span>
-        <span class="tag">p</span>
-        <span class="tag">a</span>
-      </div>
+    <h3>{{ page.title }}</h3>
+    <p class="slug">/{{ page.slug }}</p>
+    <p class="description">{{ page.description }}</p>
 
-      <div class="footer">
-        <span class="status" [class.published]="page.status === 'published'">
-          {{ page.status | titlecase }}
-        </span>
+    <div class="tags">
+      <span class="tag">h1</span>
+      <span class="tag">p</span>
+      <span class="tag">a</span>
+    </div>
 
-        <div class="actions">
-          <button class="btn-outline">Edit</button>
-          <button class="btn-dark">Preview</button>
-        </div>
+    <div class="footer">
+      <span class="status" [class.published]="page.status === 'published'">
+        {{ page.status | titlecase }}
+      </span>
+
+      <div class="actions">
+        <button class="btn-outline">Edit</button>
+        <button class="btn-dark">Preview</button>
       </div>
     </div>
   </div>

@@ -1,47 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface PageItem {
-  title: string;
-  slug: string;
-  description: string;
-  status: 'draft' | 'published';
-}
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-pages',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './pages.html',
-  styleUrls: ['./pages.scss']
+  styleUrls: ['./pages.scss'],
 })
 export class PagesComponent implements OnInit {
-  pages: PageItem[] = [];
+  pages: any[] = [];
   isLoading = true;
+  error: string | null = null;
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    // TEMPORARY DATA (sample lang sa karon)
-    this.pages = [
-      {
-        title: 'Home Page',
-        slug: 'home',
-        description: 'Main landing page of the website.',
-        status: 'published'
-      },
-      {
-        title: 'About Us',
-        slug: 'about',
-        description: 'Company background and mission.',
-        status: 'published'
-      },
-      {
-        title: 'Contact',
-        slug: 'contact',
-        description: 'Contact form and details.',
-        status: 'draft'
-      }
-    ];
+    this.loadPages();
+  }
 
-    this.isLoading = false;
+  loadPages(): void {
+    this.isLoading = true;
+    this.error = null;
+
+    this.http.get<any[]>('https://localhost:7090/api/Pages').subscribe({
+      next: (data) => {
+        console.log('Pages from API:', data);
+        this.pages = Array.isArray(data) ? data : [];
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Pages API error:', err);
+        this.error = 'Failed to load pages.';
+        this.isLoading = false;
+      }
+    });
   }
 }

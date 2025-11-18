@@ -1,1 +1,62 @@
-<p>activity-log works!</p>
+<!-- src/app/activity-log/activity-log.html -->
+
+<div class="activity-page">
+  <h1 class="title">Activity Log</h1>
+  <p class="subtitle">Keep track of significant changes.</p>
+
+  <div class="toolbar">
+    <div class="left">
+      <select
+          class="filter-select"
+          [value]="filter"
+          (change)="onFilterChange($event)"
+        >
+        <option value="all">All contents</option>
+        <option value="page">Pages</option>
+        <option value="post">Posts</option>
+        <option value="banner">Banners</option>
+        <option value="popup">Popups</option>
+        <option value="system">System</option>
+      </select>
+    </div>
+
+    <button class="filter-btn" (click)="loadLogs()">
+      &#128269; Filter
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="info-text">Loading activity...</div>
+  <div *ngIf="error" class="error-text">{{ error }}</div>
+
+  <div class="table-wrapper" *ngIf="!isLoading && !error">
+    <table class="activity-table" *ngIf="logs.length > 0; else noLogs">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>Content Affected</th>
+          <th>Content ID</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of logs">
+          <td>
+            {{ log.timestamp | date:'yyyy-MM-dd' }}<br />
+            <span class="time">{{ log.timestamp | date:'hh:mm a' }}</span>
+          </td>
+          <td>{{ log.userName }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.contentTitle }}</td>
+          <td>{{ log.contentId }}</td>
+          <td>{{ log.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noLogs>
+      <div class="info-text">No activity yet.</div>
+    </ng-template>
+  </div>
+</div>

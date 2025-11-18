@@ -54,14 +54,23 @@ export const routes: Routes = [
           {
             path: 'banners',
             loadComponent: () => import('./content/banners/banner').then(m => m.BannersComponent)
-    }
+          },
+          {
+            path: 'content/posts',
+            loadComponent: () => import('./content/posts/post').then(m => m.PostsComponent)
+          },
+          {
+          path: 'content/banners',
+          loadComponent: () =>
+            import('./content/banners/banner').then(m => m.BannersComponent)
+        },
+          {
+          path: 'activity-log',
+          loadComponent: () => import('./activity-log/activity-log').then(m => m.ActivityLog)
+        }
   ]
 },
 
-      {
-        path: 'activity-log',
-        loadComponent: () => import('./activity-log/activity-log').then(m => m.ActivityLog)
-      }
     ]
   },
   

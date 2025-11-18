@@ -1,0 +1,18 @@
+<div *ngIf="isLoading">Loading banners...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div *ngIf="!isLoading && banners.length === 0">
+  No banners found.
+</div>
+
+<div class="banners-grid" *ngIf="!isLoading && banners.length > 0">
+  <div class="banner-card" *ngFor="let b of banners">
+    <img [src]="b.imageUrl" alt="Banner" class="banner-img" />
+
+    <h3>{{ b.title }}</h3>
+
+    <p>Status: {{ b.status }}</p>
+
+    <button>Edit</button>
+  </div>
+</div>
