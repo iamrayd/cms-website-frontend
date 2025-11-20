@@ -1,69 +1,73 @@
-<main class="content">
-  <!-- Top Header: Tabs + Search + User -->
-  <header class="topbar">
-    <div class="tabs">
-      <a [class.active]="activeTab === 'pages'" (click)="setTab('pages')">Pages</a> |
-      <a [class.active]="activeTab === 'posts'" (click)="setTab('posts')">Posts</a> |
-      <a [class.active]="activeTab === 'banners'" (click)="setTab('banners')">Banners</a>
-    </div>
+<section class="content-page">
+  <header class="content-header">
+    <nav class="tabs">
+      <button
+        *ngFor="let tab of tabs"
+        type="button"
+        class="tab"
+        (click)="setTab(tab.value)"
+        [class.active]="tab.value === activeTab"
+      >
+        {{ tab.label }}
+      </button>
+    </nav>
 
-    <div class="search">
-      <mat-form-field appearance="outline">
-        <input matInput placeholder="Search" [(ngModel)]="searchTerm" />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-      <button class="new-btn" (click)="goToForm()">+ New {{ activeTab | titlecase }}</button>
-    </div>
-
-    <div class="user">
-      <img src="https://via.placeholder.com/40" alt="User" />
-      <div>
-        <strong>Galvez James</strong><br />
-        <small>galvez@gmail.com</small>
-      </div>
+    <div class="header-actions">
+      <label class="search-field" aria-label="Search within active tab">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M10 2a8 8 0 1 1 4.9 14.3l5.4 5.4a1 1 0 0 1-1.4 1.4l-5.4-5.4A8 8 0 0 1 10 2m0 2a6 6 0 1 0 0 12a6 6 0 0 0 0-12"
+          />
+        </svg>
+        <input type="text" [placeholder]="searchPlaceholder" [(ngModel)]="searchTerm" />
+      </label>
     </div>
   </header>
 
-  <!-- Content Cards -->
-  <section class="cards">
-    <mat-card *ngFor="let item of displayedContents" class="content-card">
-      <div class="card-top">
-        <img mat-card-image src="https://via.placeholder.com/100x100" alt="Image" />
-        <div class="card-info">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.description }}</p>
-          <div class="tags">
-            <span
-              *ngFor="let tag of item.tags"
-              class="tag"
-              [ngClass]="{
-                blue: tag === '&lt;h1&gt;',
-                green: tag === '&lt;p&gt;',
-                red: tag === '&lt;a&gt;'
-              }"
-            >
-              {{ tag }}
-            </span>
-          </div>
+  <section class="cards-grid" *ngIf="filteredCards.length; else emptyState">
+    <article *ngFor="let item of filteredCards" class="content-card">
+      <div class="card-media">
+        <div class="media-placeholder">
+          <span class="circle"></span>
+          <span class="triangle large"></span>
+          <span class="triangle small"></span>
         </div>
       </div>
 
-      <div class="card-bottom">
-        <span
-          class="status"
-          [ngClass]="{
-            published: item.status === 'Published',
-            draft: item.status === 'Draft',
-            archived: item.status === 'Archived'
-          }"
-        >
-          ● {{ item.status }}
-        </span>
-        <div class="actions">
-          <button mat-flat-button color="accent" (click)="editItem(item)">Edit</button>
-          <button mat-flat-button color="primary">Preview</button>
+      <div class="card-body">
+        <div class="card-title">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+        </div>
+        <div class="tags">
+          <span *ngFor="let tag of item.tags" class="tag" [ngClass]="tagClass(tag)">
+            {{ tag }}
+          </span>
         </div>
       </div>
-    </mat-card>
+
+      <div class="card-footer">
+        <div class="status-pill">
+          <span class="label">Status</span>
+          <span class="value" [ngClass]="statusClass(item.status)">
+            {{ item.status }}
+          </span>
+        </div>
+        <div class="actions">
+          <button type="button" class="ghost" (click)="editItem(item)">Edit</button>
+          <button type="button" class="primary" (click)="goToForm()">Preview</button>
+        </div>
+      </div>
+    </article>
   </section>
-</main>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <p>No {{ activeTab | titlecase }} found.</p>
+      <button type="button" class="primary" (click)="goToForm()">
+        Create new {{ activeTab | titlecase }}
+      </button>
+    </div>
+  </ng-template>
+</section>

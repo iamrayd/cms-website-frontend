@@ -7,6 +7,7 @@ export interface User {
   name: string;
   email: string;
   avatar: string;
+  role: 'admin' | 'editor' | 'viewer';
 }
 
 @Injectable({ providedIn: 'root' })
@@ -28,7 +29,9 @@ export class AuthService {
       const user: User = {
         name: 'Galvez James',
         email: 'Galvez@gmail.com',
-        avatar: 'https://scontent-mnl1-1.xx.fbcdn.net/v/t39.30808-1/224570019_4882169058494561_8380156668375777092_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=110&ccb=1-7&_nc_sid=1d2534&_nc_eui2=AeGig9udzX9Q7bCmIoKqkmzskld63bbbx1KSV3rdttvHUkDMPUxUecj_10BQkNPthUW_vrBVzge2eyP8D3QG6sRm&_nc_ohc=vysagaBbQLYQ7kNvwF5UO9S&_nc_oc=AdkXo6B0Sal7CXdExYYpYgfB6_ca_YfpCHMYPDQVo519LBzEKlzduvvm_5b9W9x4b0c&_nc_zt=24&_nc_ht=scontent-mnl1-1.xx&_nc_gid=Y7BgoqIvH2HiQ3N_601upg&oh=00_AfgfN-ZKs_EHhSK4zv_RB3rD-pBd5HcfxIhIO38ZXcoZLg&oe=691A01C5'
+        avatar:
+          'https://scontent.fceb9-1.fna.fbcdn.net/v/t39.30808-1/224570019_4882169058494561_8380156668375777092_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=110&ccb=1-7&_nc_sid=1d2534&_nc_eui2=AeGig9udzX9Q7bCmIoKqkmzskld63bbbx1KSV3rdttvHUkDMPUxUecj_10BQkNPthUW_vrBVzge2eyP8D3QG6sRm&_nc_ohc=OHKF9SafgWMQ7kNvwGGcGL2&_nc_oc=AdnuvVdF3X7tW29eKQscsJtfTyphMpsY-LfMFcPOFQpZDN-Nf-fqaVM4X2hlGm6P0Bc&_nc_zt=24&_nc_ht=scontent.fceb9-1.fna&_nc_gid=vvNFtNHd1NimD19ZvNsxxA&oh=00_AfjNqyavsqsLHc9upTXnwuEcleGz7S1qHa8ATAkIsl-2kg&oe=6921EAC5',
+        role: 'admin',
       };
       
       return of({ token: 'mock-token', user }).pipe(
@@ -57,5 +60,13 @@ export class AuthService {
 
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
+  }
+
+  userHasRole(role: User['role']): boolean {
+    return this.getCurrentUser()?.role === role;
+  }
+
+  isAdmin(): boolean {
+    return this.userHasRole('admin');
   }
 }

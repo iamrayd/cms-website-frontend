@@ -1,0 +1,57 @@
+<section class="user-management-page">
+  <header class="page-header">
+    <div>
+      <h1>Manage Users</h1>
+      <p class="subtitle">Keep track of team members and assigned roles.</p>
+    </div>
+  </header>
+
+  <label class="search-field" aria-label="Search users">
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M10 2a8 8 0 1 1 4.9 14.3l5.4 5.4a1 1 0 0 1-1.4 1.4l-5.4-5.4A8 8 0 0 1 10 2m0 2a6 6 0 1 0 0 12a6 6 0 0 0 0-12"
+      />
+    </svg>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search users..." />
+  </label>
+
+  <div class="table-wrapper" *ngIf="filteredUsers.length; else emptyState">
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Name</th>
+          <th>Email Address</th>
+          <th>Role</th>
+          <th class="actions-column">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers">
+          <td>
+            <div class="avatar-placeholder">
+              <img [src]="user.avatar" [alt]="user.name" />
+            </div>
+          </td>
+          <td>{{ user.name }}</td>
+          <td class="email-link">
+            <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+          </td>
+          <td>{{ user.role }}</td>
+          <td class="row-action">
+            <button type="button" class="ghost">Action</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <h3>No users match your search</h3>
+      <p>Try another keyword or invite new members to your workspace.</p>
+      <button type="button" class="primary-btn">Invite User</button>
+    </div>
+  </ng-template>
+</section>

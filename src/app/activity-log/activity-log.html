@@ -1,1 +1,67 @@
-<p>activity-log works!</p>
+<section class="activity-log-page">
+  <header class="page-header">
+    <div>
+      <h1>Activity Log</h1>
+      <p class="subtitle">Keep track of significant changes.</p>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <label class="select-wrapper">
+      <span class="sr-only">Filter activity</span>
+      <select [(ngModel)]="selectedFilter">
+        <option *ngFor="let option of filters" [ngValue]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+      <span class="chevron" aria-hidden="true">⌄</span>
+    </label>
+
+    <button type="button" class="filter-btn" (click)="triggerFilter()">
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M4 6h16v2l-6 6v4l-4 2v-6L4 8z" />
+      </svg>
+      Filter
+    </button>
+  </div>
+
+  <div class="table-wrapper" *ngIf="filteredLogs.length; else emptyState">
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>Content Affected</th>
+          <th>Content ID</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of filteredLogs">
+          <td>
+            <div class="timestamp">
+              <span>{{ log.timestamp.date }}</span>
+              <span>{{ log.timestamp.time }}</span>
+            </div>
+          </td>
+          <td>{{ log.user }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.contentAffected }}</td>
+          <td>{{ log.contentId }}</td>
+          <td>
+            <span class="status-chip" [ngClass]="statusClass(log.status)">
+              {{ log.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <p>No activity entries for this filter yet.</p>
+    </div>
+  </ng-template>
+</section>
