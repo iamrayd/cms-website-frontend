@@ -49,6 +49,27 @@
           <span class="nav-text">Activity Log</span>
         </a>
 
+        <a
+          *ngIf="isAdmin"
+          routerLink="/user-management"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="M12 12q-2.071 0-3.536-1.464T7 7t1.464-3.536T12 2t3.536 1.464T17 7t-1.464 3.536T12 12m-7 10v-2.8q0-1.01.506-1.83t1.374-1.32Q8.748 15.95 10.317 15.475T13 15q1.779 0 3.348.475t2.438 1.395q.869.5 1.391 1.32T21 19.2V22z"
+            />
+          </svg>
+          <span class="nav-text">User Management</span>
+        </a>
+
         <!-- Add more navigation items as needed -->
       </nav>
 

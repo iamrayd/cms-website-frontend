@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth-guard';
+import { AdminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
   // Auth routes (signin, signup) - using AuthLayoutComponent
@@ -40,11 +41,16 @@ export const routes: Routes = [
       },
       {
         path: 'content',
-        loadComponent: () => import('./content/content').then(m => m.Content)
+        loadComponent: () => import('./content/content').then(m => m.ContentListComponent)
       },
       {
         path: 'activity-log',
         loadComponent: () => import('./activity-log/activity-log').then(m => m.ActivityLog)
+      },
+      {
+        path: 'user-management',
+        canActivate: [AdminGuard],
+        loadComponent: () => import('./user-management/user-management').then(m => m.UserManagementComponent)
       }
     ]
   },
