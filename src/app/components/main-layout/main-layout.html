@@ -1,6 +1,4 @@
 <div class="main-layout">
-  <app-header [showProfile]="true" />
-
   <div class="layout-container">
     <aside
       class="sidebar"
@@ -49,12 +47,7 @@
           <span class="nav-text">Activity Log</span>
         </a>
 
-        <a
-          *ngIf="isAdmin"
-          routerLink="/user-management"
-          routerLinkActive="active"
-          class="nav-item"
-        >
+        <a *ngIf="isAdmin" routerLink="/user-management" routerLinkActive="active" class="nav-item">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -122,7 +115,6 @@
       </main>
 
       <!-- Footer -->
-      <app-footer />
     </div>
   </div>
 </div>

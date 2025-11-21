@@ -1,8 +1,10 @@
-
 .main-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
   background-color: #f3f3f3;
 }
 
@@ -16,7 +18,7 @@
 
 .sidebar {
   width: 250px;
-  background-color: #f3f3f3;
+  background-color: #000;
   color: #333;
   transition: width 0.3s ease-in-out;
   overflow-y: auto;
@@ -155,9 +157,11 @@
 
 .main-content {
   flex: 1;
-  padding: 2rem;
+  padding: 0;
   background-color: #f3f3f3;
   min-height: calc(100vh - 200px);
+  box-sizing: border-box;
+  margin: 0;
 }
 
 // MOBILE MENU BUTTON (HAMBURGER)
