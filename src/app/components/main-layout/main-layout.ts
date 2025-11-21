@@ -11,8 +11,8 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: true,
   imports: [
     RouterOutlet,
- 
     CommonModule,
+    Header,
     NgClass,
     RouterLink,
     RouterLinkActive,
