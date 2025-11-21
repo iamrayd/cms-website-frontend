@@ -13,10 +13,7 @@
       <label class="filter-label">
         <span>Content type</span>
         <select [(ngModel)]="contentFilter">
-          <option
-            *ngFor="let opt of filterOptions"
-            [value]="opt.value"
-          >
+          <option *ngFor="let opt of filterOptions" [value]="opt.value">
             {{ opt.label }}
           </option>
         </select>
@@ -24,7 +21,6 @@
     </div>
 
     <button class="filter-button" type="button">
-      <!-- purely visual for now -->
       &#128269; Filter
     </button>
   </div>
@@ -49,13 +45,13 @@
             {{ formatTimestamp(entry.timestamp) }}
           </td>
           <td class="col-user">
-            {{ entry.user }}
+            {{ entry.userName }}
           </td>
           <td class="col-action">
             {{ entry.action }}
           </td>
           <td class="col-content">
-            {{ entry.contentAffected }}
+            {{ entry.contentTitle }}
           </td>
           <td class="col-id">
             {{ entry.contentId }}
@@ -67,9 +63,15 @@
           </td>
         </tr>
 
-        <tr *ngIf="filteredLog.length === 0">
+        <tr *ngIf="!isLoading && filteredLog.length === 0">
           <td colspan="6" class="empty-row">
             No activity found for this filter.
+          </td>
+        </tr>
+
+        <tr *ngIf="isLoading">
+          <td colspan="6" class="empty-row">
+            Loading activity log...
           </td>
         </tr>
       </tbody>
