@@ -75,19 +75,24 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./content/banners/banner').then(m => m.BannersComponent),
           },
-          // ❌ GIKUHA nato ang 'content/posts' ug 'content/banners'
-          // kay redundant & sayop ang path (magkaduha ang "content")
         ],
       },
 
       // ---- ACTIVITY LOG (separate menu, same level as Home) ----
       {
-  path: 'activity-log',
-  loadComponent: () =>
-    import('./activity-log/activity-log').then(
-      m => m.ActivityLogComponent   // ⭐ CHANGED: sakto nga class name
-    ),
-},
+        path: 'activity-log',
+        loadComponent: () =>
+          import('./activity-log/activity-log').then(
+            m => m.ActivityLogComponent
+          ),
+      },
+
+      // ---- ARCHIVES PAGE (NEW) ----
+      {
+        path: 'content/archives',
+        loadComponent: () =>
+          import('./archived/archive').then(m => m.ArchivesComponent), // ⭐ IMPORTANT: ./archived/archive (NO .component)
+      },
     ],
   },
 

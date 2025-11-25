@@ -2,14 +2,21 @@
 
 .contents-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;  /* ⭐ heading only, no space-between */
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 
   h2 {
     font-size: 22px;
     font-weight: 600;
   }
+}
+
+/* ⭐ new row for button, left aligned */
+.sub-header-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
 }
 
 .btn-primary {
@@ -37,8 +44,8 @@
   border-radius: 12px;
   border: 1px solid #eee;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  display: flex;              /* already ok */
-  flex-direction: column;     /* already ok */
+  display: flex;
+  flex-direction: column;
   height: 360px;
   overflow: hidden;
 }
@@ -57,16 +64,7 @@
   margin: 4px 0;
 }
 
-/* ❌ OLD:
-.banner-status,
 .banner-date {
-  font-size: 13px;
-  margin: 2px 0;
-}
-*/
-
-/* ✅ only banner-date kay wala na tay .banner-status element */
-.banner-date { /* CHANGED (klaro lang) */
   font-size: 13px;
   margin: 2px 0;
 }
@@ -107,19 +105,18 @@
   -webkit-box-orient: vertical;
 }
 
-/* ✅ FOOTER sa ubos: status left, buttons right */
+/* FOOTER */
+
 .banner-footer {
-  margin-top: auto;                 /* CHANGED: auto ra, gi-remove ang 10px */
+  margin-top: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* (wala na 2nd margin-top ari) */
 }
 
 .card-actions {
   display: flex;
   gap: 8px;
-  margin-top: 0;                    /* CHANGED: dili na auto */
 
   button {
     padding: 4px 10px;
