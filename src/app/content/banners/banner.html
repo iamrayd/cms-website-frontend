@@ -2,22 +2,26 @@
   <h2>Banners</h2>
 </div>
 
-<!-- ⭐ New row for the button, aligned LEFT -->
+<!-- Header -->
 <div class="sub-header-row">
   <button class="btn-primary" (click)="openCreateModal()">
     New Banner
   </button>
 </div>
 
+<!-- Loading / Error -->
 <div *ngIf="isLoading">Loading banners...</div>
 <div *ngIf="error" class="error">{{ error }}</div>
 
+<!-- Empty -->
 <div *ngIf="!isLoading && banners.length === 0">
   No banners found.
 </div>
 
+<!-- Banners Grid -->
 <div class="banners-grid" *ngIf="!isLoading && banners.length > 0">
   <div class="banner-card" *ngFor="let b of banners">
+
     <img [src]="b.imageUrl" alt="Banner" class="banner-img" />
 
     <h3 class="banner-title">{{ b.title }}</h3>
@@ -34,12 +38,8 @@
       {{ stripHtml(b.content) }}
     </p>
 
-    <!-- FOOTER – status left, buttons right -->
     <div class="banner-footer">
-      <span
-        class="status-pill"
-        [ngClass]="getStatusClass(b.status)"
-      >
+      <span class="status-pill" [ngClass]="getStatusClass(b.status)">
         {{ b.status | titlecase }}
       </span>
 
@@ -48,61 +48,45 @@
         <button (click)="openPreviewModal(b)">Preview</button>
       </div>
     </div>
+
   </div>
 </div>
 
-<!-- ========= CREATE / EDIT BANNER MODAL ========= -->
-
+<!-- CREATE / EDIT MODAL -->
 <div class="modal-backdrop" *ngIf="showCreateModal" (click)="closeCreateModal()"></div>
 
 <div class="modal" *ngIf="showCreateModal">
   <form class="modal-content" (ngSubmit)="saveBanner()" novalidate>
+
     <h3>{{ editingBannerId ? 'Edit Banner' : 'New Banner' }}</h3>
 
     <label>
       Title
-      <input
-        type="text"
-        [(ngModel)]="newBanner.title"
-        name="title"
-        required
-      />
+      <input type="text" [(ngModel)]="newBanner.title" name="title" required />
     </label>
 
     <label>
       Image URL
-      <input
-        type="text"
-        [(ngModel)]="newBanner.imageUrl"
-        name="imageUrl"
-        required
-      />
+      <input type="text" [(ngModel)]="newBanner.imageUrl" name="imageUrl" required />
     </label>
 
     <label>
       Link (optional)
-      <input
-        type="text"
-        [(ngModel)]="newBanner.link"
-        name="link"
-      />
+      <input type="text" [(ngModel)]="newBanner.link" name="link" />
     </label>
 
     <label>
       Status
-      <select
-        [(ngModel)]="newBanner.status"
-        name="status"
-        required
-      >
+      <select [(ngModel)]="newBanner.status" name="status" required>
         <option value="draft">Draft</option>
         <option value="published">Published</option>
       </select>
     </label>
 
-    <!-- PUBLISH DATETIME -->
+    <!-- PUBLISH DATE -->
     <label>Publish Date</label>
     <div class="datetime-row">
+
       <mat-form-field appearance="outline" class="date-field">
         <mat-label>Date</mat-label>
         <input
@@ -118,22 +102,19 @@
 
       <mat-form-field appearance="outline" class="time-field">
         <mat-label>Time</mat-label>
-        <select
-          matNativeControl
-          [(ngModel)]="publishTime"
-          name="publishTime"
-          required
-        >
+        <select matNativeControl [(ngModel)]="publishTime" name="publishTime" required>
           <option *ngFor="let t of timeOptions" [value]="t">
             {{ t }}
           </option>
         </select>
       </mat-form-field>
+
     </div>
 
-    <!-- EXPIRE DATETIME -->
+    <!-- EXPIRE DATE -->
     <label>Expire Date</label>
     <div class="datetime-row">
+
       <mat-form-field appearance="outline" class="date-field">
         <mat-label>Date</mat-label>
         <input
@@ -149,30 +130,29 @@
 
       <mat-form-field appearance="outline" class="time-field">
         <mat-label>Time</mat-label>
-        <select
-          matNativeControl
-          [(ngModel)]="expireTime"
-          name="expireTime"
-          required
-        >
+        <select matNativeControl [(ngModel)]="expireTime" name="expireTime" required>
           <option *ngFor="let t of timeOptions" [value]="t">
             {{ t }}
           </option>
         </select>
       </mat-form-field>
+
     </div>
 
+    <!-- CONTENT EDITOR -->
     <label>
       Content
-      <textarea
+      <angular-editor
         [(ngModel)]="newBanner.content"
         name="content"
-        rows="4"
-        placeholder="Write the banner content here..."
-      ></textarea>
+        [config]="editorConfig"
+        (focus)="onEditorFocus($event)"
+      ></angular-editor>
     </label>
 
+    <!-- Actions -->
     <div class="modal-actions">
+
       <button
         type="button"
         class="btn-danger"
@@ -188,19 +168,22 @@
       <button type="button" (click)="closeCreateModal()" [disabled]="isSaving || isDeleting">
         Cancel
       </button>
+
       <button type="submit" [disabled]="isSaving || isDeleting">
         {{ isSaving ? 'Saving...' : (editingBannerId ? 'Update Banner' : 'Save Banner') }}
       </button>
+
     </div>
+
   </form>
 </div>
 
-<!-- ========= PREVIEW MODAL ========= -->
-
+<!-- PREVIEW MODAL -->
 <div class="modal-backdrop" *ngIf="showPreviewModal" (click)="closePreviewModal()"></div>
 
 <div class="modal" *ngIf="showPreviewModal">
   <div class="modal-content preview-modal">
+
     <button class="modal-close-x" type="button" (click)="closePreviewModal()">✕</button>
 
     <h3>{{ previewBanner?.title }}</h3>
@@ -226,5 +209,6 @@
         Close
       </button>
     </div>
+
   </div>
 </div>

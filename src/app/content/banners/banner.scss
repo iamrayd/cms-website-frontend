@@ -191,6 +191,18 @@
       resize: vertical;
       min-height: 80px;
     }
+
+    /* ⭐ ADDED FOR QUILL EDITOR */
+    .ql-toolbar,
+    .ql-container {
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+    }
+
+    .ql-container {
+      min-height: 120px;
+      font-size: 14px;
+    }
   }
 }
 

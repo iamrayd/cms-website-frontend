@@ -9,12 +9,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
+// Angular Editor
+import { AngularEditorModule, AngularEditorConfig } from '@kolkov/angular-editor';
+
 @Component({
   selector: 'app-banners',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
+    AngularEditorModule,   // ⭐ EDITOR MODULE
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
@@ -47,7 +51,40 @@ export class BannersComponent implements OnInit {
     content: ''
   };
 
-  // ⭐ NEW: date + time controls for UI
+  // ⭐ ANGULAR EDITOR CONFIG (WordPress-style toolbar)
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '250px',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    enableToolbar: true,
+    showToolbar: true,
+    translate: 'no',
+    placeholder: 'Write the banner content here...',
+    defaultParagraphSeparator: 'p',
+    defaultFontName: 'Arial',
+    defaultFontSize: '3', // 1–7 (HTML font size)
+
+    fonts: [
+      { class: 'arial', name: 'Arial' },
+      { class: 'times-new-roman', name: 'Times New Roman' },
+      { class: 'calibri', name: 'Calibri' },
+      { class: 'comic-sans-ms', name: 'Comic Sans MS' },
+      { class: 'verdana', name: 'Verdana' }
+    ],
+    
+    // example: pwede nimo i-hide uban buttons kung ganahan ka
+    toolbarHiddenButtons: [
+      [
+             // 'insertVideo', 'strikeThrough', 'subscript', 'superscript'
+      ]
+    ]
+  };
+
+  // date + time controls
   publishDate: Date | null = null;
   publishTime: string = '09:00 AM';
 
@@ -65,42 +102,38 @@ export class BannersComponent implements OnInit {
     this.loadBanners();
   }
 
-  // generate list of times (every 30 minutes, 12h AM/PM)
   generateTimes() {
     const options: string[] = [];
 
-    // 1 AM to 11 AM
     for (let h = 1; h <= 11; h++) {
       const hh = h.toString().padStart(2, '0');
       options.push(`${hh}:00 AM`);
     }
 
-    // 12 NOON
     options.push('12:00 PM');
 
-    // 1 PM to 11 PM
     for (let h = 1; h <= 11; h++) {
       const hh = h.toString().padStart(2, '0');
       options.push(`${hh}:00 PM`);
     }
 
-    // 12 MIDNIGHT
     options.push('12:00 AM');
 
     this.timeOptions = options;
   }
 
+  onEditorFocus(event: any) {
+  // Disable the auto-undo behavior
+  if (event?.editor && event.editor.undoManager) {
+    event.editor.undoManager.clear();
+  }
+}
+
   loadBanners() {
     this.http.get<any[]>(this.apiUrl).subscribe({
       next: (data) => {
         const now = new Date();
-
-        // auto-hide expired banners
-        this.banners = data.filter(b => {
-          if (!b.expireAt) return true;
-          return new Date(b.expireAt) > now;
-        });
-
+        this.banners = data.filter(b => !b.expireAt || new Date(b.expireAt) > now);
         this.isLoading = false;
       },
       error: (err) => {
@@ -122,12 +155,10 @@ export class BannersComponent implements OnInit {
       expireAt: '',
       content: ''
     };
-
     this.publishDate = null;
     this.publishTime = '09:00 AM';
     this.expireDate = null;
     this.expireTime = '05:00 PM';
-
     this.showCreateModal = true;
   }
 
@@ -175,43 +206,37 @@ export class BannersComponent implements OnInit {
     const expireIso = this.combineDateTime(this.expireDate, this.expireTime);
 
     if (!this.newBanner.title || !this.newBanner.imageUrl || !publishIso || !expireIso) {
-      alert('Please fill in title, image, publish date/time and expire date/time.');
+      alert('Please fill in all required fields.');
       return;
     }
 
     this.newBanner.publishAt = publishIso;
     this.newBanner.expireAt = expireIso;
-
     this.isSaving = true;
 
-    // UPDATE
     if (this.editingBannerId) {
-      this.http.put(`${this.apiUrl}/${this.editingBannerId}`, this.newBanner)
-        .subscribe({
-          next: () => {
-            this.isSaving = false;
-            this.showCreateModal = false;
-            this.editingBannerId = null;
-            this.loadBanners();
-          },
-          error: (err) => {
-            console.error(err);
-            this.isSaving = false;
-            alert('Failed to update banner.');
-          }
-        });
+      this.http.put(`${this.apiUrl}/${this.editingBannerId}`, this.newBanner).subscribe({
+        next: () => {
+          this.isSaving = false;
+          this.showCreateModal = false;
+          this.editingBannerId = null;
+          this.loadBanners();
+        },
+        error: () => {
+          this.isSaving = false;
+          alert('Failed to update banner.');
+        }
+      });
       return;
     }
 
-    // CREATE
     this.http.post<any>(this.apiUrl, this.newBanner).subscribe({
       next: (created) => {
         this.banners.unshift(created);
         this.isSaving = false;
         this.showCreateModal = false;
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.isSaving = false;
         alert('Failed to save banner.');
       }
@@ -220,9 +245,7 @@ export class BannersComponent implements OnInit {
 
   deleteBanner() {
     if (!this.editingBannerId) return;
-
-    const confirmed = confirm('Delete this banner? This cannot be undone.');
-    if (!confirmed) return;
+    if (!confirm('Delete this banner?')) return;
 
     this.isDeleting = true;
 
@@ -233,8 +256,7 @@ export class BannersComponent implements OnInit {
         this.editingBannerId = null;
         this.loadBanners();
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.isDeleting = false;
         alert('Failed to delete banner.');
       }
@@ -258,11 +280,8 @@ export class BannersComponent implements OnInit {
   }
 
   getStatusClass(status: string | undefined): string {
-    const s = (status || '').toLowerCase();
-    return s === 'published' ? 'published' : 'draft';
+    return (status || '').toLowerCase() === 'published' ? 'published' : 'draft';
   }
-
-  // --- helpers for date/time ---
 
   private formatTime12h(date: Date): string {
     let h = date.getHours();
@@ -270,9 +289,7 @@ export class BannersComponent implements OnInit {
     const ampm = h >= 12 ? 'PM' : 'AM';
     h = h % 12;
     if (h === 0) h = 12;
-    const hh = h.toString().padStart(2, '0');
-    const mm = m.toString().padStart(2, '0');
-    return `${hh}:${mm} ${ampm}`;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
   }
 
   private combineDateTime(date: Date | null, time: string): string | null {
@@ -287,7 +304,6 @@ export class BannersComponent implements OnInit {
 
     const result = new Date(date);
     result.setHours(hours, mm, 0, 0);
-
     return result.toISOString();
   }
 }

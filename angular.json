@@ -25,9 +25,17 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@kolkov/angular-editor/assets/icons",
+                "output": "assets/ae-icons/"
               }
             ],
-            "styles": ["src/styles.scss"]
+            "styles": [
+              "src/styles.scss",
+              "node_modules/@kolkov/angular-editor/themes/default.scss"
+            ]
           },
           "configurations": {
             "production": {
@@ -80,7 +88,9 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"]
+            "styles": [
+              "src/styles.scss"
+            ]
           }
         }
       }
